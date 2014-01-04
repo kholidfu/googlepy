@@ -1,4 +1,4 @@
 #!/usr/bin/env python
 
 def test():
-    pass
+    return None
