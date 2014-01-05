@@ -35,9 +35,16 @@ def grab(url):
     ## get snippet
     snippets = [i.get_text() for i in soup.findAll('span', attrs={'class': 'st'})]
     ## gathering data
-    data = zip(titles, urls, snippets)
+    # data = zip(titles, urls, snippets)
 
-    return data
+    container = []
+
+    ## format data
+    if len(titles) == len(urls) == len(snippets):
+        for i in range(len(titles)):
+            container.append({'title': titles[i], 'url': urls[i]})
+
+    return container
 
 jobs = [gevent.spawn(grab, url) for url in google_urls]
 gevent.joinall(jobs)
