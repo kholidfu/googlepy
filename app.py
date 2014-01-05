@@ -8,7 +8,7 @@ import re
 import pymongo
 
 keywords = ['toyota owners manual', 'honda owners manual']
-google_urls = ["https://www.google.com/search?q=" + keyword.replace(' ', '+') + "+filetype:pdf&oq=search+google+100+results&num=100" for keyword in keywords]
+google_urls = ["https://www.google.com/search?q=" + keyword.replace(' ', '+') + "+filetype:pdf&oq=search+google+100+results&num=5" for keyword in keywords]
 
 def grab(url):
     print 'Starting %s' % url
@@ -49,5 +49,12 @@ def grab(url):
 jobs = [gevent.spawn(grab, url) for url in google_urls]
 gevent.joinall(jobs)
 
-for job in jobs:
-    print job.value
+#for job in jobs:
+#    print {'keyword': keyword, 'results': job.value}
+
+data = [job.value for job in jobs]
+
+from pprint import pprint
+
+for i in range(len(data)):
+    pprint({'keyword': keywords[i], 'results': data[i]})
