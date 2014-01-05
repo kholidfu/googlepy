@@ -42,7 +42,7 @@ def grab(url):
     ## format data
     if len(titles) == len(urls) == len(snippets):
         for i in range(len(titles)):
-            container.append({'title': titles[i], 'url': urls[i]})
+            container.append({'title': titles[i], 'url': urls[i], 'snippets': snippets[i]})
 
     return container
 
