@@ -37,7 +37,12 @@ def grab(url):
     pattern = re.compile(r"=(.*?)&")
     #re.search(re.compile(r"q=(.*?)&"), u).group(1)
     urls = [re.search(pattern, i).group(1) for i in ahrefs]
+    snippets = [i.get_text() for i in soup.findAll('span', attrs={'class': 'st'})]
+    print titles[0]
     print urls[0]
+    print snippets[0]
+    print '='
+    print
 
 jobs = [gevent.spawn(grab, url) for url in urls]
 gevent.joinall(jobs)
