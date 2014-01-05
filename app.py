@@ -6,9 +6,12 @@ import urllib2
 from bs4 import BeautifulSoup
 import re
 import pymongo
+from pprint import pprint
+
 
 keywords = ['toyota owners manual', 'honda owners manual', 'suzuki owners manual']
 google_urls = ["https://www.google.com/search?q=" + keyword.replace(' ', '+') + "+filetype:pdf&oq=search+google+100+results&num=5" for keyword in keywords]
+
 
 def grab(url):
     print 'Starting %s' % url
@@ -35,8 +38,6 @@ def grab(url):
     ## get snippet
     snippets = [i.get_text() for i in soup.findAll('span', attrs={'class': 'st'})]
     ## gathering data
-    # data = zip(titles, urls, snippets)
-
     container = []
 
     ## format data
@@ -46,20 +47,14 @@ def grab(url):
 
     return container
 
+# join all jobs
 jobs = [gevent.spawn(grab, url) for url in google_urls]
 gevent.joinall(jobs)
 
-#for job in jobs:
-#    print {'keyword': keyword, 'results': job.value}
-
+# finishing touch
 results = [job.value for job in jobs]
-
-from pprint import pprint
-
 data = {}
-
 for i in range(len(results)):
     data.update({'keyword': keywords[i], 'results': results[i]})
+    pprint(data)
     # insert into mongodb
-
-print type(data)
