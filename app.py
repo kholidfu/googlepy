@@ -9,18 +9,7 @@ from bs4 import BeautifulSoup
 import re
 import pymongo
 
-keywords = [
-'toyota owners manual',
-'honda owners manual',
-# 'mitsubishi owners manual',
-# 'suzuki owners manual',
-# 'nikon owners manual',
-# 'canon owners manual',
-# 'python ebook',
-# 'php ebook',
-# 'ruby on rails tutorial',
-# 'java ebook tutorial'
-]
+keywords = ['toyota owners manual', 'honda owners manual']
 
 google_urls = ["https://www.google.com/search?q=" + keyword.replace(' ', '+') + "+filetype:pdf&oq=search+google+100+results&num=100" for keyword in keywords]
 
@@ -48,15 +37,14 @@ def grab(url):
 
     ## get snippet
     snippets = [i.get_text() for i in soup.findAll('span', attrs={'class': 'st'})]
-    print titles[:3]
-    print urls[:3]
 
+    data = zip(titles, urls, snippets)
 
-
+    return data
 
 jobs = [gevent.spawn(grab, url) for url in google_urls]
 gevent.joinall(jobs)
 
-# make sure the length between title, url, and snippets are the same
-# and not null
-# insert into mongodb
+for job in jobs:
+    for j in job.value:
+        print j
