@@ -41,7 +41,7 @@ def grab(url):
     print titles[0]
     print urls[0]
     print snippets[0]
-    print '='
+    print '=' * 50
     print
 
 jobs = [gevent.spawn(grab, url) for url in urls]
