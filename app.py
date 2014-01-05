@@ -1,16 +1,13 @@
 #!/usr/bin/env python
-
 import gevent
 from gevent import monkey
 monkey.patch_all()
-
 import urllib2
 from bs4 import BeautifulSoup
 import re
 import pymongo
 
 keywords = ['toyota owners manual', 'honda owners manual']
-
 google_urls = ["https://www.google.com/search?q=" + keyword.replace(' ', '+') + "+filetype:pdf&oq=search+google+100+results&num=100" for keyword in keywords]
 
 def grab(url):
@@ -37,7 +34,7 @@ def grab(url):
 
     ## get snippet
     snippets = [i.get_text() for i in soup.findAll('span', attrs={'class': 'st'})]
-
+    ## gathering data
     data = zip(titles, urls, snippets)
 
     return data
@@ -46,5 +43,4 @@ jobs = [gevent.spawn(grab, url) for url in google_urls]
 gevent.joinall(jobs)
 
 for job in jobs:
-    for j in job.value:
-        print j
+    print job.value
