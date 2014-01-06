@@ -23,6 +23,7 @@ keywords = [
     'canon owners manual',
     'nikon owners manual',
     ]
+
 google_urls = ["https://www.google.com/search?q=" + keyword.replace(' ', '+') + "+filetype:pdf&num=100" for keyword in keywords]
 
 def grab(url):
