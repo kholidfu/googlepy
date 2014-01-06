@@ -15,7 +15,6 @@ db = c['pdfs']
 keywords = ['toyota owners manual', 'honda owners manual', 'suzuki owners manual', 'mistubishi owners manual']
 google_urls = ["https://www.google.com/search?q=" + keyword.replace(' ', '+') + "+filetype:pdf&oq=search+google+100+results&num=5" for keyword in keywords]
 
-
 def grab(url):
     print 'Starting %s' % url
     # http request
@@ -58,7 +57,5 @@ gevent.joinall(jobs)
 results = [job.value for job in jobs]
 data = {}
 for i in range(len(results)):
-    db.pdf.insert({'keyword': keywords[i], 'results': results[i]})
-    #print(data)
-    #print
     # insert into mongodb
+    db.pdf.insert({'keyword': keywords[i], 'results': results[i]})
