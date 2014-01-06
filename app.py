@@ -6,7 +6,6 @@ import urllib2
 from bs4 import BeautifulSoup
 import re
 import pymongo
-from pprint import pprint
 
 # database thing
 c = pymongo.Connection()
