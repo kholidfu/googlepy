@@ -7,3 +7,10 @@ keyword.
 Penggunaan
 -----------
 $ python app.py
+
+Requirements
+-------
+- beautifulsoup4
+- gevent
+- greenlet
+- pymongo
