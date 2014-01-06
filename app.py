@@ -8,8 +8,11 @@ import re
 import pymongo
 from pprint import pprint
 
+# database thing
+c = pymongo.Connection()
+db = c['pdfs']
 
-keywords = ['toyota owners manual', 'honda owners manual', 'suzuki owners manual']
+keywords = ['toyota owners manual', 'honda owners manual', 'suzuki owners manual', 'mistubishi owners manual']
 google_urls = ["https://www.google.com/search?q=" + keyword.replace(' ', '+') + "+filetype:pdf&oq=search+google+100+results&num=5" for keyword in keywords]
 
 
@@ -55,6 +58,7 @@ gevent.joinall(jobs)
 results = [job.value for job in jobs]
 data = {}
 for i in range(len(results)):
-    data.update({'keyword': keywords[i], 'results': results[i]})
-    pprint(data)
+    db.pdf.insert({'keyword': keywords[i], 'results': results[i]})
+    #print(data)
+    #print
     # insert into mongodb
