@@ -31,3 +31,7 @@ Todo
 - Atau bahkan data ini tidak kita jadikan satu dengan web server, melainkan ditaruh dalam sebuah server tersendiri yang terpisah, sehingga proses query cukup menggunakan API call saja.
 - Efficient mongodb update with unique id
 http://stackoverflow.com/questions/3815633/pymongo-a-more-efficient-update
+- Google Suggest Keyword
+http://google.com/complete/search?output=toolbar&q=toyota+owners+manual
+- Bing Suggest Keyword
+http://api.bing.com/osjson.aspx?query=python+programming
