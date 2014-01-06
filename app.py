@@ -54,7 +54,6 @@ gevent.joinall(jobs)
 
 # finishing touch
 results = [job.value for job in jobs]
-data = {}
 for i in range(len(results)):
     # insert into mongodb
     db.pdf.insert({'keyword': keywords[i], 'results': results[i]})
