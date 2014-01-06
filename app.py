@@ -11,8 +11,8 @@ import pymongo
 c = pymongo.Connection()
 db = c['pdfs']
 
-keywords = ['toyota owners manual', 'honda owners manual', 'suzuki owners manual', 'mistubishi owners manual']
-google_urls = ["https://www.google.com/search?q=" + keyword.replace(' ', '+') + "+filetype:pdf&num=5" for keyword in keywords]
+keywords = ['toyota owners manual', 'honda owners manual']
+google_urls = ["https://www.google.com/search?q=" + keyword.replace(' ', '+') + "+filetype:pdf&num=3" for keyword in keywords]
 
 def grab(url):
     print 'Starting %s' % url
@@ -25,8 +25,6 @@ def grab(url):
     soup = BeautifulSoup(html)
 
     # parsing
-    ## keywords
-    keys = keywords
 
     ## get title
     titles = [i.get_text() for i in soup.findAll('h3', attrs={'class': 'r'})]
@@ -54,6 +52,17 @@ gevent.joinall(jobs)
 
 # finishing touch
 results = [job.value for job in jobs]
-for i in range(len(results)):
+
+#for i in range(len(results)):
     # insert into mongodb
-    db.pdf.insert({'keyword': keywords[i], 'results': results[i]})
+    # db.pdf.insert({'keyword': keywords[i], 'results': results[i]})
+
+# atau dimasukkan tiap result
+## keywords
+keys = keywords
+
+for i in range(len(results)):
+    for r in results[i]:
+        r.update({'keyword': keys[i]})
+        #print r
+        db.pdf.insert(r)
