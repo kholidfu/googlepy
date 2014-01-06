@@ -11,8 +11,19 @@ import pymongo
 c = pymongo.Connection()
 db = c['pdfs']
 
-keywords = ['toyota owners manual', 'honda owners manual']
-google_urls = ["https://www.google.com/search?q=" + keyword.replace(' ', '+') + "+filetype:pdf&num=3" for keyword in keywords]
+keywords = [
+    'toyota owners manual',
+    'honda owners manual',
+    'suzuki owners manual',
+    'mitsubishi owners manual',
+    'yamaha owners manual',
+    'kawasaki owners manual',
+    'mazda owners manual',
+    'opel owners manual',
+    'canon owners manual',
+    'nikon owners manual',
+    ]
+google_urls = ["https://www.google.com/search?q=" + keyword.replace(' ', '+') + "+filetype:pdf&num=100" for keyword in keywords]
 
 def grab(url):
     print 'Starting %s' % url
@@ -25,7 +36,6 @@ def grab(url):
     soup = BeautifulSoup(html)
 
     # parsing
-
     ## get title
     titles = [i.get_text() for i in soup.findAll('h3', attrs={'class': 'r'})]
 
