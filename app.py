@@ -67,24 +67,36 @@ results = [job.value for job in jobs]
 keys = keywords
 
 # google suggest
-import urllib2
 import xml.etree.ElementTree as etree
 
-google_suggest = urllib2.urlopen("http://google.com/complete/search?output=toolbar&q=toyota+owners+manual")
-suggests = etree.parse(google_suggest)
-google_suggest_data = []
-for suggest in suggests.iter('suggestion'):
-    google_suggest_data.append(suggest.get('data'))
+def gsuggest(key):
+    url = "http://google.com/complete/search?output=toolbar&q=" + key.replace(' ', '+')
+    google_suggest = urllib2.urlopen(url)
+    suggests = etree.parse(google_suggest)
+    google_suggest_data = []
+    for suggest in suggests.iter('suggestion'):
+        google_suggest_data.append(suggest.get('data'))
+    return google_suggest_data
+
+jobs = [gevent.spawn(gsuggest, key) for key in keys]
+gevent.joinall(jobs)
+google_suggest_data = [job.value for job in jobs]
 
 # bing suggest
-url = "http://api.bing.com/osjson.aspx?query=python+programming"
-bing_suggest = urllib2.urlopen(url).read()
-bing_suggest_data = bing_suggest.replace('[', '').replace(']', '').replace('"', '').split(',')[1:]
+def bsuggest(key):
+    url = "http://api.bing.com/osjson.aspx?query=" + key.replace(' ', '+')
+    bing_suggest = urllib2.urlopen(url).read()
+    bing_suggest_data = bing_suggest.replace('[', '').replace(']', '').replace('"', '')
+    bing_suggest_data = bing_suggest_data.split(',')[1:]
+    return bing_suggest_data
 
-for i in range(len(results)):
-    for r in results[i]:
+jobs = [gevent.spawn(bsuggest, key) for key in keys]
+gevent.joinall(jobs)
+bing_suggest_data = [job.value for job in jobs]
+
+for i in range(len(results)): # jumlah (len) sesuai jumlah (len) keywords ex: 10
+    for r in results[i]: # jumlah (len) sesuai parameter num= ex: 100
         r.update({'keyword': keys[i]})
-        r.update({'google_suggests': google_suggest_data})
-        r.update({'bing_suggests': bing_suggest_data})
-        #print r
+        r.update({'google_suggests': google_suggest_data[i]})
+        r.update({'bing_suggests': bing_suggest_data[i]})
         pdfdb.pdf.insert(r)
