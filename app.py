@@ -76,11 +76,11 @@ keys = keywords
 import urllib2
 import xml.etree.ElementTree as etree
 
-xml = urllib2.urlopen("http://google.com/complete/search?output=toolbar&q=toyota+owners+manual")
-suggests = etree.parse(xml)
-suggest_container = []
+google_suggest = urllib2.urlopen("http://google.com/complete/search?output=toolbar&q=toyota+owners+manual")
+suggests = etree.parse(google_suggest)
+google_suggest_data = []
 for suggest in suggests.iter('suggestion'):
-    suggest_container.append(suggest.get('data'))
+    google_suggest_data.append(suggest.get('data'))
 
 # bing suggest
 url = "http://api.bing.com/osjson.aspx?query=python+programming"
@@ -90,7 +90,7 @@ bing_suggest_data = bing_suggest.replace('[', '').replace(']', '').replace('"', 
 for i in range(len(results)):
     for r in results[i]:
         r.update({'keyword': keys[i]})
-        r.update({'google_suggests': suggest_container})
+        r.update({'google_suggests': google_suggest_data})
         r.update({'bing_suggests': bing_suggest_data})
         #print r
         db.pdf.insert(r)
