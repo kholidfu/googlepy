@@ -72,8 +72,19 @@ results = [job.value for job in jobs]
 ## keywords
 keys = keywords
 
+# google suggest
+import urllib2
+import xml.etree.ElementTree as etree
+
+xml = urllib2.urlopen("http://google.com/complete/search?output=toolbar&q=toyota+owners+manual")
+suggests = etree.parse(xml)
+suggest_container = []
+for suggest in suggests.iter('suggestion'):
+    suggest_container.append(suggest.get('data'))
+
 for i in range(len(results)):
     for r in results[i]:
         r.update({'keyword': keys[i]})
+        r.update({'suggests': suggest_container})
         #print r
         db.pdf.insert(r)
