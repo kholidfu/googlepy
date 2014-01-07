@@ -14,6 +14,9 @@ c = pymongo.Connection()
 pdfdb = c['pdfs']
 termsdb = c['terms']
 
+# termsdb schema
+# {'term': 'theterm', 'status': 0} keyword not used
+# {'term': 'theterm', 'status': 1} keyword already used
 # get 10/100 random terms which status is 0
 # for i in chosen keywords
 _len = termsdb.term.find().count()
@@ -32,36 +35,28 @@ def grab(url):
     opener = urllib2.build_opener()
     opener.addheaders = [('User-agent', 'Mozilla/5.0')]
     html = opener.open(url).read()
-
     # soup coming in
     soup = BeautifulSoup(html)
-
     # parsing
     ## get title
     titles = [i.get_text() for i in soup.findAll('h3', attrs={'class': 'r'})]
-
     ## get url
     ahrefs = [i.find('a')['href'] for i in soup.findAll('h3', attrs={'class': 'r'})]
     pattern = re.compile(r"=(.*?)&")
     urls = [re.search(pattern, i).group(1) for i in ahrefs]
-
     ## get snippet
     snippets = [i.get_text() for i in soup.findAll('span', attrs={'class': 'st'})]
     ## gathering data
     container = []
-
     ## format data
     if len(titles) == len(urls) == len(snippets):
         for i in range(len(titles)):
             container.append({'title': titles[i], 'url': urls[i], 'snippet': snippets[i]})
-
     return container
 
 # join all jobs
 jobs = [gevent.spawn(grab, url) for url in google_urls]
 gevent.joinall(jobs)
-
-# finishing touch
 results = [job.value for job in jobs]
 
 ## keywords
