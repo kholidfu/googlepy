@@ -9,8 +9,10 @@ import pymongo
 
 # database thing
 c = pymongo.Connection()
-db = c['pdfs']
+pdfdb = c['pdfs']
+termsdb = c['terms']
 
+# get 10/100 random terms which status is 0
 keywords = [
     'toyota owners manual',
     'honda owners manual',
@@ -23,6 +25,8 @@ keywords = [
     'canon owners manual',
     'nikon owners manual',
     ]
+# for i in chosen keywords
+# update status from 0 to 1
 
 google_urls = ["https://www.google.com/search?q=" + keyword.replace(' ', '+') + "+filetype:pdf&num=100" for keyword in keywords]
 
@@ -93,4 +97,4 @@ for i in range(len(results)):
         r.update({'google_suggests': google_suggest_data})
         r.update({'bing_suggests': bing_suggest_data})
         #print r
-        db.pdf.insert(r)
+        pdfdb.pdf.insert(r)
