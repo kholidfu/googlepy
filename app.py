@@ -82,9 +82,15 @@ suggest_container = []
 for suggest in suggests.iter('suggestion'):
     suggest_container.append(suggest.get('data'))
 
+# bing suggest
+url = "http://api.bing.com/osjson.aspx?query=python+programming"
+bing_suggest = urllib2.urlopen(url).read()
+bing_suggest_data = bing_suggest.replace('[', '').replace(']', '').replace('"', '').split(',')[1:]
+
 for i in range(len(results)):
     for r in results[i]:
         r.update({'keyword': keys[i]})
-        r.update({'suggests': suggest_container})
+        r.update({'google_suggests': suggest_container})
+        r.update({'bing_suggests': bing_suggest_data})
         #print r
         db.pdf.insert(r)
