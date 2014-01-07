@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 import re
 import pymongo
 from random import randint
+import xml.etree.ElementTree as etree
 
 # database thing
 c = pymongo.Connection()
@@ -67,8 +68,6 @@ results = [job.value for job in jobs]
 keys = keywords
 
 # google suggest
-import xml.etree.ElementTree as etree
-
 def gsuggest(key):
     url = "http://google.com/complete/search?output=toolbar&q=" + key.replace(' ', '+')
     google_suggest = urllib2.urlopen(url)
