@@ -19,7 +19,7 @@ while True:
             if db.term.find_one({'term': d.getText()}) is None:
                 db.term.insert({'term': d.getText(), 'status': 0})
     except:
-        print 'something error happened!, wait for 30 second'
+        print 'something error happened! wait for 30 seconds ...'
         time.sleep(30)
         continue
 
