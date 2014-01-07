@@ -11,3 +11,7 @@ soup = BeautifulSoup(html)
 div = soup.find('div', attrs={'class': 'rel_search'})
 for d in div.findAll('a'):
     print d.getText()
+
+# format dbase
+# {'term': 'theterm', 'status': 0} # not inserted yet
+# {'term': 'theterm', 'status': 1} # inserted
