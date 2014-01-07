@@ -6,6 +6,7 @@ import urllib2
 from bs4 import BeautifulSoup
 import re
 import pymongo
+from random import randint
 
 # database thing
 c = pymongo.Connection()
@@ -13,20 +14,14 @@ pdfdb = c['pdfs']
 termsdb = c['terms']
 
 # get 10/100 random terms which status is 0
-keywords = [
-    'toyota owners manual',
-    'honda owners manual',
-    'suzuki owners manual',
-    'mitsubishi owners manual',
-    'yamaha owners manual',
-    'kawasaki owners manual',
-    'mazda owners manual',
-    'opel owners manual',
-    'canon owners manual',
-    'nikon owners manual',
-    ]
 # for i in chosen keywords
+_len = termsdb.term.find().count()
+keywords = [i['term'] for i in termsdb.term.find({'status': 0}).skip(randint(0, _len - 10)).limit(10)]
 # update status from 0 to 1
+for key in keywords:
+    termsdb.term.update({'term': key}, {"$set": {'status': 1}})
+
+print 'keywords loaded, ready to launch the machine...'
 
 google_urls = ["https://www.google.com/search?q=" + keyword.replace(' ', '+') + "+filetype:pdf&num=100" for keyword in keywords]
 
@@ -68,11 +63,6 @@ gevent.joinall(jobs)
 # finishing touch
 results = [job.value for job in jobs]
 
-#for i in range(len(results)):
-    # insert into mongodb
-    # db.pdf.insert({'keyword': keywords[i], 'results': results[i]})
-
-# atau dimasukkan tiap result
 ## keywords
 keys = keywords
 
