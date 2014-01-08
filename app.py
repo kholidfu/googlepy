@@ -27,7 +27,7 @@ for key in keywords:
 
 print 'keywords loaded, ready to launch the machine...'
 
-google_urls = ["https://www.google.com/search?q=" + keyword.replace(' ', '+') + "+filetype:pdf&num=100" for keyword in keywords]
+google_urls = ["https://www.google.com/search?q=" + key.replace(' ', '+') + "+filetype:pdf&num=100" for key in keywords]
 
 def grab(url):
     print 'Starting %s' % url
