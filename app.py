@@ -21,7 +21,7 @@ termsdb = c['terms']
 # get 10/100 random terms which status is 0
 # for i in chosen keywords
 _len = termsdb.term.find().count()
-keywords = [{'term': i['term'], 'type': i['type']} for i in termsdb.term.find({'status': 0}).skip(randint(0, _len - 10)).limit(10)]
+keywords = [{'term': i['term'], 'type': i['type']} for i in termsdb.term.find({'status': 0}).skip(randint(0, _len - 10)).limit(30)]
 # update status from 0 to 1
 for key in keywords:
     termsdb.term.update({'term': key['term']}, {"$set": {'status': 1}})
@@ -42,9 +42,12 @@ def grab(url):
     ## get title
     titles = [i.get_text() for i in soup.findAll('h3', attrs={'class': 'r'})]
     ## get url
+    from urllib import unquote
     ahrefs = [i.find('a')['href'] for i in soup.findAll('h3', attrs={'class': 'r'})]
     pattern = re.compile(r"=(.*?)&")
     urls = [re.search(pattern, i).group(1) for i in ahrefs]
+    ## prevent from string quoting on url
+    urls = [unquote(url) for url in urls]
     ## get snippet
     snippets = [i.get_text() for i in soup.findAll('span', attrs={'class': 'st'})]
     ## gathering data
