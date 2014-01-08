@@ -8,6 +8,7 @@ import re
 import pymongo
 from random import randint
 import xml.etree.ElementTree as etree
+from urllib import unquote
 
 
 # database thing
@@ -42,7 +43,6 @@ def grab(url):
     ## get title
     titles = [i.get_text() for i in soup.findAll('h3', attrs={'class': 'r'})]
     ## get url
-    from urllib import unquote
     ahrefs = [i.find('a')['href'] for i in soup.findAll('h3', attrs={'class': 'r'})]
     pattern = re.compile(r"=(.*?)&")
     urls = [re.search(pattern, i).group(1) for i in ahrefs]
