@@ -22,7 +22,7 @@ Fitur
 Contoh Data (JSON)
 -------------------
 ```
-[{u'_id': ObjectId('52cbb9ffdde3685e2057738b'),
+{u'_id': ObjectId('52cbb9ffdde3685e2057738b'),
   u'bing_suggests': [u'grammar for ielts download',
                      u'grammar for ielts',
                      u'grammar for ielts pdf',
@@ -45,7 +45,7 @@ Contoh Data (JSON)
   u'keyword': u'grammar for ielts',
   u'snippet': u'F2-IELTS Refund of Deposit Results Form 2012-13 (120817).doc. Hong Kong \nBaptist University ... Activate Your Spoken Grammar for IELTS. P.T.O &. Form 2\xa0...',
   u'title': u'Hong Kong Baptist University Language Centre IELTS Results Form',
-  u'url': u'http://lc.hkbu.edu.hk/english/ielts/download/ielts_results_form.pdf'}]
+  u'url': u'http://lc.hkbu.edu.hk/english/ielts/download/ielts_results_form.pdf'}
 ```
 
 Ujicoba
