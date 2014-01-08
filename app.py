@@ -9,6 +9,7 @@ import pymongo
 from random import randint
 import xml.etree.ElementTree as etree
 
+
 # database thing
 c = pymongo.Connection()
 pdfdb = c['pdfs']
