@@ -94,31 +94,3 @@ for i in range(len(results)): # jumlah (len) sesuai jumlah (len) keywords ex: 10
         r.update({'google_suggests': google_suggest_data[i]})
         r.update({'bing_suggests': bing_suggest_data[i]})
         pdfdb.pdf.insert(r)
-
-# sample data
-"""
-[{u'_id': ObjectId('52cbb9ffdde3685e2057738b'),
-  u'bing_suggests': [u'grammar for ielts download',
-                     u'grammar for ielts',
-                     u'grammar for ielts pdf',
-                     u'grammar for ielts free download',
-                     u'grammar for ielts with answers download',
-                     u'grammar for ielts book',
-                     u'grammar for ielts.pdf',
-                     u'grammar for ielts cambridge',
-                     u'grammar for ielts.pdf all pages'],
-  u'google_suggests': [u'grammar for ielts',
-                       u'grammar for ielts pdf',
-                       u'grammar for ielts free download',
-                       u'grammar for ielts cambridge',
-                       u'grammar for ielts with answers',
-                       u'grammar for ielts download',
-                       u'grammar for ielts cd',
-                       u'grammar for ielts ebook',
-                       u'grammar for ielts audio',
-                       u'grammar for ielts book'],
-  u'keyword': u'grammar for ielts',
-  u'snippet': u'F2-IELTS Refund of Deposit Results Form 2012-13 (120817).doc. Hong Kong \nBaptist University ... Activate Your Spoken Grammar for IELTS. P.T.O &. Form 2\xa0...',
-  u'title': u'Hong Kong Baptist University Language Centre IELTS Results Form',
-  u'url': u'http://lc.hkbu.edu.hk/english/ielts/download/ielts_results_form.pdf'}]
-"""
