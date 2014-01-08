@@ -14,6 +14,11 @@ Requirements
 - greenlet
 - pymongo
 
+Fitur
+-----
+- Multithreading-based apps, cepat dan efisien, sekali eksekusi bisa mendapatkan sampai 10000 hasil (result).
+- Tiap hasil, sudah dilengkapi dengan google suggest dan bing suggest.
+
 Ujicoba
 -------
 - Sekali request 20 keywords (2000 results) berhasil di localhost
@@ -24,14 +29,7 @@ Alur
 - Mengumpulkan database keywords
 - Menggunakan database keywords di atas, kita lakukan query ke Google, 100 keywords tiap query, kemudian jeda 10 menit
 
-
 Todo
 -------
 - Mengingat nantinya jumlah data akan sangat besar, sebaiknya ketika proses insert tidak perlu mengecek apakah data sebelumnya sudah ada atau belum, tetapi langsung insert saja, nantinya akan dibuat skrip tersendiri untuk menghilangkan data yang ganda dan dijalankan ketika server sedang tidak sibuk.
 - Atau bahkan data ini tidak kita jadikan satu dengan web server, melainkan ditaruh dalam sebuah server tersendiri yang terpisah, sehingga proses query cukup menggunakan API call saja.
-- Efficient mongodb update with unique id
-http://stackoverflow.com/questions/3815633/pymongo-a-more-efficient-update
-- Google Suggest Keyword
-http://google.com/complete/search?output=toolbar&q=toyota+owners+manual
-- Bing Suggest Keyword
-http://api.bing.com/osjson.aspx?query=python+programming
