@@ -17,7 +17,11 @@ while True:
         div = soup.find('div', attrs={'class': 'rel_search'})
         for d in div.findAll('a'):
             if db.term.find_one({'term': d.getText()}) is None:
-                db.term.insert({'term': d.getText(), 'status': 0})
+                db.term.insert({
+                    'term': d.getText(),
+                    'status': 0,
+                    'type': 'pdf',
+                    })
     except:
         print 'something error happened! wait for 30 seconds ...'
         time.sleep(30)

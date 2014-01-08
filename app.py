@@ -21,14 +21,14 @@ termsdb = c['terms']
 # get 10/100 random terms which status is 0
 # for i in chosen keywords
 _len = termsdb.term.find().count()
-keywords = [i['term'] for i in termsdb.term.find({'status': 0}).skip(randint(0, _len - 10)).limit(10)]
+keywords = [{'term': i['term'], 'type': i['type']} for i in termsdb.term.find({'status': 0}).skip(randint(0, _len - 10)).limit(10)]
 # update status from 0 to 1
 for key in keywords:
-    termsdb.term.update({'term': key}, {"$set": {'status': 1}})
+    termsdb.term.update({'term': key['term']}, {"$set": {'status': 1}})
 
 print 'keywords loaded, ready to launch the machine...'
 
-google_urls = ["https://www.google.com/search?q=" + key.replace(' ', '+') + "+filetype:pdf&num=100" for key in keywords]
+google_urls = ["https://www.google.com/search?q=" + key['term'].replace(' ', '+') + "+filetype:" + key['type'] + "&num=100" for key in keywords]
 
 def grab(url):
     print 'Starting %s' % url
@@ -73,7 +73,7 @@ def gsuggest(key):
         google_suggest_data.append(suggest.get('data'))
     return google_suggest_data
 
-jobs = [gevent.spawn(gsuggest, key) for key in keys]
+jobs = [gevent.spawn(gsuggest, key['term']) for key in keys]
 gevent.joinall(jobs)
 google_suggest_data = [job.value for job in jobs]
 
@@ -85,13 +85,14 @@ def bsuggest(key):
     bing_suggest_data = bing_suggest_data.split(',')[1:]
     return bing_suggest_data
 
-jobs = [gevent.spawn(bsuggest, key) for key in keys]
+jobs = [gevent.spawn(bsuggest, key['term']) for key in keys]
 gevent.joinall(jobs)
 bing_suggest_data = [job.value for job in jobs]
 
 for i in range(len(results)): # jumlah (len) sesuai jumlah (len) keywords ex: 10
     for r in results[i]: # jumlah (len) sesuai parameter num= ex: 100
-        r.update({'keyword': keys[i]})
+        r.update({'keyword': keys[i]['term']})
         r.update({'google_suggests': google_suggest_data[i]})
         r.update({'bing_suggests': bing_suggest_data[i]})
+        r.update({'type': keys[i]['type']})
         pdfdb.pdf.insert(r)
