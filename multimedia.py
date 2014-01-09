@@ -8,6 +8,7 @@ import re
 import pymongo
 from urllib import unquote
 from datetime import datetime
+from unidecode import unidecode
 
 # database thing
 c = pymongo.Connection()
