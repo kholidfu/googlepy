@@ -9,6 +9,7 @@ import pymongo
 from random import randint
 import xml.etree.ElementTree as etree
 from urllib import unquote
+from unidecode import unidecode
 
 
 # database thing
@@ -22,7 +23,7 @@ termsdb = c['terms']
 # get 10/100 random terms which status is 0
 # for i in chosen keywords
 _len = termsdb.term.find().count()
-keywords = [{'term': i['term'], 'type': i['type']} for i in termsdb.term.find({'status': 0}).skip(randint(0, _len - 10)).limit(30)]
+keywords = [{'term': unidecode(i['term']), 'type': i['type']} for i in termsdb.term.find({'status': 0}).skip(randint(0, _len - 10)).limit(10)]
 # update status from 0 to 1
 for key in keywords:
     termsdb.term.update({'term': key['term']}, {"$set": {'status': 1}})
@@ -60,6 +61,7 @@ def grab(url):
 
 # join all jobs
 jobs = [gevent.spawn(grab, url) for url in google_urls]
+print 'starting to crawl...'
 gevent.joinall(jobs)
 results = [job.value for job in jobs]
 
