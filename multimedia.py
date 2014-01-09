@@ -21,7 +21,7 @@ keywords = [{'term': unidecode(i['keyword']), 'type': i['type'], 'source_url': i
 
 # update status from 0 to 1
 for key in keywords:
-    termsdb.term.update({'term': key['term']}, {"$set": {'status': 1}})
+    termsdb.nonpdfterm.update({'term': key['term']}, {"$set": {'status': 1}})
 
 # terms = {
 #     'keyword': 'crack xbox mediafire.com',
@@ -31,7 +31,7 @@ for key in keywords:
 #     'status': 0,
 #     }
 
-google_urls = ["https://www.google.com/search?q=" + terms['keyword'].replace(' ', '+') + "+" + terms['type'] + "+\"" + terms['source_url'] + "\"" + "&num=10"]
+google_urls = ["https://www.google.com/search?q=" + keyword['keyword'].replace(' ', '+') + "+" + keyword['type'] + "+\"" + keyword['source_url'] + "\"" + "&num=10" for keyword in keywords]
 
 def grab(url):
     print 'Starting %s' % url
@@ -66,12 +66,13 @@ print 'starting to crawl...'
 gevent.joinall(jobs)
 results = [job.value for job in jobs]
 
+
 for i in range(len(results)): # jumlah (len) sesuai jumlah (len) keywords ex: 10
     for r in results[i]: # jumlah (len) sesuai parameter num= ex: 100
-        r.update({'keyword': terms['keyword']})
-        r.update({'type': terms['type']})
-        r.update({'source': terms['source']})
-        r.update({'source_url': terms['source_url']})
+        r.update({'keyword': keywords[i]['keyword']})
+        r.update({'type': keywords[i]['type']})
+        r.update({'source': keywords[i]['source']})
+        r.update({'source_url': keywords[i]['source_url']})
         r.update({'crawl': 0})
         r.update({'added': datetime.now()})
         mediadb.nonpdf.insert(r)
