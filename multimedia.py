@@ -19,11 +19,11 @@ termsdb = c['terms']
 
 # termsdb.nonpdfterm.find()
 _len = termsdb.nonpdfterm.find().count()
-keywords = [{'term': unidecode(i['keyword']), 'type': i['type'], 'source_url': i['source_url']} for i in termsdb.nonpdfterm.find({'status': 0}).skip(randint(0, _len - 10)).limit(1)]
+keywords = [{'keyword': unidecode(i['keyword']), 'type': i['type'], 'source': i['source'], 'source_url': i['source_url']} for i in termsdb.nonpdfterm.find({'status': 0}).skip(randint(0, _len - 10)).limit(1)]
 
 # update status from 0 to 1
 for key in keywords:
-    termsdb.nonpdfterm.update({'term': key['term']}, {"$set": {'status': 1}})
+    termsdb.nonpdfterm.update({'keyword': key['keyword']}, {"$set": {'status': 1}})
 
 # terms = {
 #     'keyword': 'crack xbox mediafire.com',
