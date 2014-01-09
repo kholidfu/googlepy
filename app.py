@@ -10,11 +10,11 @@ from random import randint
 import xml.etree.ElementTree as etree
 from urllib import unquote
 from unidecode import unidecode
-
+from datetime import datetime
 
 # database thing
 c = pymongo.Connection()
-pdfdb = c['pdfs']
+pdfdb = c['files']
 termsdb = c['terms']
 
 # termsdb schema
@@ -30,7 +30,7 @@ for key in keywords:
 
 print 'keywords loaded, ready to launch the machine...'
 
-google_urls = ["https://www.google.com/search?q=" + key['term'].replace(' ', '+') + "+filetype:" + key['type'] + "&num=100" for key in keywords]
+google_urls = ["https://www.google.com/search?q=" + key['term'].replace(' ', '+') + "+filetype:" + key['type'] + "&num=30" for key in keywords]
 
 def grab(url):
     print 'Starting %s' % url
@@ -99,5 +99,6 @@ for i in range(len(results)): # jumlah (len) sesuai jumlah (len) keywords ex: 10
         r.update({'keyword': keys[i]['term']})
         r.update({'google_suggests': google_suggest_data[i]})
         r.update({'bing_suggests': bing_suggest_data[i]})
+        r.update({'added': datetime.now()})
         r.update({'type': keys[i]['type']})
         pdfdb.pdf.insert(r)
