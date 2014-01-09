@@ -12,14 +12,23 @@ from datetime import datetime
 # database thing
 c = pymongo.Connection()
 mediadb = c['files']
+termsdb = c['terms']
 
-terms = {
-    'keyword': 'crack xbox mediafire.com',
-    'type': 'rar',
-    'source': 'pastebin',
-    'source_url': 'pastebin.com',
-    'crawl': 0,
-    }
+# termsdb.nonpdfterm.find()
+_len = termsdb.nonpdfterm.find().count()
+keywords = [{'term': unidecode(i['keyword']), 'type': i['type'], 'source_url': i['source_url']} for i in termsdb.nonpdfterm.find({'status': 0}).skip(randint(0, _len - 10)).limit(1)]
+
+# update status from 0 to 1
+for key in keywords:
+    termsdb.term.update({'term': key['term']}, {"$set": {'status': 1}})
+
+# terms = {
+#     'keyword': 'crack xbox mediafire.com',
+#     'type': 'rar',
+#     'source': 'pastebin',
+#     'source_url': 'pastebin.com',
+#     'status': 0,
+#     }
 
 google_urls = ["https://www.google.com/search?q=" + terms['keyword'].replace(' ', '+') + "+" + terms['type'] + "+\"" + terms['source_url'] + "\"" + "&num=10"]
 
