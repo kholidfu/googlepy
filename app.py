@@ -14,10 +14,10 @@ from datetime import datetime
 
 # database thing
 c = pymongo.Connection()
-pdfdb = c['files']
+pdfdb = c['pdfs']
 termsdb = c['terms']
-gsuggests = c['gsuggests']
-bsuggests = c['bsuggests']
+gsuggestsdb = c['gsuggests']
+bsuggestsdb = c['bsuggests']
 
 # termsdb schema
 # {'term': 'theterm', 'status': 0} keyword not used
@@ -88,7 +88,7 @@ def gsuggest(key):
     for suggest in suggests.iter('suggestion'):
         # insert > mongo
         try:
-            gsuggests.suggest.insert({'word': unidecode(suggest)})
+            gsuggestsdb.suggest.insert({'word': unidecode(suggest)})
         except:
             continue
 
@@ -107,7 +107,7 @@ def bsuggest(key):
     for bing in bing_suggest_data:
         # insert > mongo
         try:
-            bsuggests.suggest.insert({'word': unidecode(bing)})
+            bsuggestsdb.suggest.insert({'word': unidecode(bing)})
         except:
             continue
 
