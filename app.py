@@ -87,9 +87,10 @@ def gsuggest(key):
     #google_suggest_data = []
     for suggest in suggests.iter('suggestion'):
         # insert > mongo
-        gsuggests.suggest.insert({'word': suggest})
-        #google_suggest_data.append(suggest.get('data'))
-        #return google_suggest_data
+        try:
+            gsuggests.suggest.insert({'word': unidecode(suggest)})
+        except:
+            continue
 
 jobs = [gevent.spawn(gsuggest, key['term']) for key in keys]
 gevent.joinall(jobs)
@@ -105,7 +106,10 @@ def bsuggest(key):
     #return bing_suggest_data
     for bing in bing_suggest_data:
         # insert > mongo
-        bsuggests.suggest.insert({'word': bing})
+        try:
+            bsuggests.suggest.insert({'word': unidecode(bing)})
+        except:
+            continue
 
 jobs = [gevent.spawn(bsuggest, key['term']) for key in keys]
 gevent.joinall(jobs)
@@ -123,8 +127,5 @@ data bsuggests ex:
 for i in range(len(results)): # jumlah (len) sesuai jumlah (len) keywords ex: 10
     for r in results[i]: # jumlah (len) sesuai parameter num= ex: 100
         r.update({'keyword': keys[i]['term']})
-        #r.update({'google_suggests': google_suggest_data[i]})
-        #r.update({'bing_suggests': bing_suggest_data[i]})
         r.update({'added': datetime.now()})
-        #r.update({'type': keys[i]['type']})
         pdfdb.pdf.insert(r)
