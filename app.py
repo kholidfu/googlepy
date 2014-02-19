@@ -88,7 +88,7 @@ def gsuggest(key):
     for suggest in suggests.iter('suggestion'):
         # insert > mongo
         try:
-            gsuggestsdb.suggest.insert({'word': unidecode(suggest)})
+            gsuggestsdb.suggest.insert({'word': unidecode(unicode(suggest))})
         except:
             continue
 
@@ -107,7 +107,7 @@ def bsuggest(key):
     for bing in bing_suggest_data:
         # insert > mongo
         try:
-            bsuggestsdb.suggest.insert({'word': unidecode(bing)})
+            bsuggestsdb.suggest.insert({'word': unidecode(unicode(bing))})
         except:
             continue
 
