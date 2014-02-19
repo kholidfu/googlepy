@@ -88,13 +88,13 @@ def gsuggest(key):
     for suggest in suggests.iter('suggestion'):
         # insert > mongo
         try:
-            gsuggestsdb.suggest.insert({'word': unidecode(unicode(suggest))})
+            gsuggestsdb.suggest.insert({'word': unidecode(unicode(suggest.get('data')))})
         except:
             continue
 
 jobs = [gevent.spawn(gsuggest, key['term']) for key in keys]
 gevent.joinall(jobs)
-google_suggest_data = [job.value for job in jobs]
+#google_suggest_data = [job.value for job in jobs]
 
 # bing suggest
 def bsuggest(key):
@@ -113,7 +113,7 @@ def bsuggest(key):
 
 jobs = [gevent.spawn(bsuggest, key['term']) for key in keys]
 gevent.joinall(jobs)
-bing_suggest_data = [job.value for job in jobs]
+#bing_suggest_data = [job.value for job in jobs]
 
 """
 data pdf ex:
