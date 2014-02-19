@@ -16,6 +16,8 @@ from datetime import datetime
 c = pymongo.Connection()
 pdfdb = c['files']
 termsdb = c['terms']
+gsuggests = c['gsuggests']
+bsuggests = c['bsuggests']
 
 # termsdb schema
 # {'term': 'theterm', 'status': 0} keyword not used
@@ -82,10 +84,12 @@ def gsuggest(key):
       + key.replace(' ', '+')
     google_suggest = urllib2.urlopen(url)
     suggests = etree.parse(google_suggest)
-    google_suggest_data = []
+    #google_suggest_data = []
     for suggest in suggests.iter('suggestion'):
-        google_suggest_data.append(suggest.get('data'))
-    return google_suggest_data
+        # insert > mongo
+        gsuggests.suggest.insert({'word': suggest})
+        #google_suggest_data.append(suggest.get('data'))
+        #return google_suggest_data
 
 jobs = [gevent.spawn(gsuggest, key['term']) for key in keys]
 gevent.joinall(jobs)
@@ -98,7 +102,9 @@ def bsuggest(key):
     bing_suggest_data = bing_suggest.replace('[', '').replace(']', '').\
       replace('"', '')
     bing_suggest_data = bing_suggest_data.split(',')[1:]
-    return bing_suggest_data
+    #return bing_suggest_data
+    for bing in bing_suggest_data:
+        bsuggests.suggest.insert({'word': bing})
 
 jobs = [gevent.spawn(bsuggest, key['term']) for key in keys]
 gevent.joinall(jobs)
@@ -107,8 +113,8 @@ bing_suggest_data = [job.value for job in jobs]
 for i in range(len(results)): # jumlah (len) sesuai jumlah (len) keywords ex: 10
     for r in results[i]: # jumlah (len) sesuai parameter num= ex: 100
         r.update({'keyword': keys[i]['term']})
-        r.update({'google_suggests': google_suggest_data[i]})
-        r.update({'bing_suggests': bing_suggest_data[i]})
+        #r.update({'google_suggests': google_suggest_data[i]})
+        #r.update({'bing_suggests': bing_suggest_data[i]})
         r.update({'added': datetime.now()})
         r.update({'type': keys[i]['type']})
         pdfdb.pdf.insert(r)
