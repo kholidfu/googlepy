@@ -111,11 +111,20 @@ jobs = [gevent.spawn(bsuggest, key['term']) for key in keys]
 gevent.joinall(jobs)
 bing_suggest_data = [job.value for job in jobs]
 
+"""
+data pdf ex:
+{title: 'thetitle', url: 'theurl', snippet: 'thesnippet', keyword: 'thekwyrod'}
+data gsuggests ex:
+{word: 'theword'}
+data bsuggests ex:
+{word: 'theword'}
+"""
+
 for i in range(len(results)): # jumlah (len) sesuai jumlah (len) keywords ex: 10
     for r in results[i]: # jumlah (len) sesuai parameter num= ex: 100
         r.update({'keyword': keys[i]['term']})
         #r.update({'google_suggests': google_suggest_data[i]})
         #r.update({'bing_suggests': bing_suggest_data[i]})
         r.update({'added': datetime.now()})
-        r.update({'type': keys[i]['type']})
+        #r.update({'type': keys[i]['type']})
         pdfdb.pdf.insert(r)
