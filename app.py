@@ -23,14 +23,19 @@ termsdb = c['terms']
 # get 10/100 random terms which status is 0
 # for i in chosen keywords
 _len = termsdb.term.find().count()
-keywords = [{'term': unidecode(i['term']), 'type': i['type']} for i in termsdb.term.find({'status': 0}).skip(randint(0, _len - 10)).limit(10)]
+keywords = [{'term': unidecode(i['term']), 'type': i['type']} \
+            for i in termsdb.term.find({'status': 0}).\
+            skip(randint(0, _len - 10)).\
+            limit(10)]
 # update status from 0 to 1
 for key in keywords:
     termsdb.term.update({'term': key['term']}, {"$set": {'status': 1}})
 
 print 'keywords loaded, ready to launch the machine...'
 
-google_urls = ["https://www.google.com/search?q=" + key['term'].replace(' ', '+') + "+filetype:" + key['type'] + "&num=30" for key in keywords]
+google_urls = ["https://www.google.com/search?q=" \
+               + key['term'].replace(' ', '+') \
+               + "+filetype:" + key['type'] + "&num=100" for key in keywords]
 
 def grab(url):
     print 'Starting %s' % url
@@ -44,19 +49,22 @@ def grab(url):
     ## get title
     titles = [i.get_text() for i in soup.findAll('h3', attrs={'class': 'r'})]
     ## get url
-    ahrefs = [i.find('a')['href'] for i in soup.findAll('h3', attrs={'class': 'r'})]
+    ahrefs = [i.find('a')['href'] for i in soup.findAll('h3',
+                                                        attrs={'class': 'r'})]
     pattern = re.compile(r"=(.*?)&")
     urls = [re.search(pattern, i).group(1) for i in ahrefs]
     ## prevent from string quoting on url
     urls = [unquote(url) for url in urls]
     ## get snippet
-    snippets = [i.get_text() for i in soup.findAll('span', attrs={'class': 'st'})]
+    snippets = [i.get_text() for i in soup.findAll('span',
+                                                   attrs={'class': 'st'})]
     ## gathering data
     container = []
     ## format data
     if len(titles) == len(urls) == len(snippets):
         for i in range(len(titles)):
-            container.append({'title': titles[i], 'url': urls[i], 'snippet': snippets[i]})
+            container.append({'title': titles[i], 'url': urls[i],
+                              'snippet': snippets[i]})
     return container
 
 # join all jobs
@@ -70,7 +78,8 @@ keys = keywords
 
 # google suggest
 def gsuggest(key):
-    url = "http://google.com/complete/search?output=toolbar&q=" + key.replace(' ', '+')
+    url = "http://google.com/complete/search?output=toolbar&q=" \
+      + key.replace(' ', '+')
     google_suggest = urllib2.urlopen(url)
     suggests = etree.parse(google_suggest)
     google_suggest_data = []
@@ -86,7 +95,8 @@ google_suggest_data = [job.value for job in jobs]
 def bsuggest(key):
     url = "http://api.bing.com/osjson.aspx?query=" + key.replace(' ', '+')
     bing_suggest = urllib2.urlopen(url).read()
-    bing_suggest_data = bing_suggest.replace('[', '').replace(']', '').replace('"', '')
+    bing_suggest_data = bing_suggest.replace('[', '').replace(']', '').\
+      replace('"', '')
     bing_suggest_data = bing_suggest_data.split(',')[1:]
     return bing_suggest_data
 
