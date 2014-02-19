@@ -104,6 +104,7 @@ def bsuggest(key):
     bing_suggest_data = bing_suggest_data.split(',')[1:]
     #return bing_suggest_data
     for bing in bing_suggest_data:
+        # insert > mongo
         bsuggests.suggest.insert({'word': bing})
 
 jobs = [gevent.spawn(bsuggest, key['term']) for key in keys]
