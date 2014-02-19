@@ -28,9 +28,3 @@ while True:
         continue
 
     time.sleep(5)
-
-
-
-# format dbase
-# {'term': 'theterm', 'status': 0} # not inserted yet
-# {'term': 'theterm', 'status': 1} # inserted
