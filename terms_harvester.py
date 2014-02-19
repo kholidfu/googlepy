@@ -5,7 +5,6 @@ import time
 
 c = pymongo.Connection()
 db = c['terms']
-
 opener = urllib2.build_opener()
 opener.addheaders = [('User-agent', 'Mozilla/5.0')]
 
