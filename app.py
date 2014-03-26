@@ -86,9 +86,10 @@ def gsuggest(key):
     suggests = etree.parse(google_suggest)
     #google_suggest_data = []
     for suggest in suggests.iter('suggestion'):
-        # insert > mongo
+        # upsert > mongo
         try:
-            gsuggestsdb.suggest.insert({'word': unidecode(unicode(suggest.get('data')))})
+            #gsuggestsdb.suggest.insert({'word': unidecode(unicode(suggest.get('data')))})
+            gsuggestsdb.suggest.update({'word': unidecode(unicode(suggest.get('data')))}, {'word': unidecode(unicode(suggest.get('data')))}, upsert=True)
         except:
             continue
 
@@ -105,9 +106,10 @@ def bsuggest(key):
     bing_suggest_data = bing_suggest_data.split(',')[1:]
     #return bing_suggest_data
     for bing in bing_suggest_data:
-        # insert > mongo
+        # upsert > mongo
         try:
-            bsuggestsdb.suggest.insert({'word': unidecode(unicode(bing))})
+            #bsuggestsdb.suggest.insert({'word': unidecode(unicode(bing))})
+            bsuggestsdb.suggest.update({'word': unidecode(unicode(bing))}, {'word': unidecode(unicode(bing))}, upsert=True)
         except:
             continue
 
